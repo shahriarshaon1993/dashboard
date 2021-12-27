@@ -4,6 +4,6 @@ dashboard is private CMS for personal project management system using Bootstrap,
 
 ## Packages Used
 
--   Install ``
+-   Install `composer require laravel/breeze --dev`
 
 The dashboard is private software licensed under the [MIT license](https://opensource.org/licenses/MIT).
