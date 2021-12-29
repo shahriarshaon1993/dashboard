@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use App\Providers\RouteServiceProvider;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Notifications\NotifyLogin;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Providers\RouteServiceProvider;
+use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Support\Facades\Notification;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -28,6 +31,16 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
+        $user = User::find(1); // Notofy only super admin
+        $loginRequestRemember = User::where('email', $request->email)->first()->remember_token;
+        $data = [
+            'loginMail' => $request->email,
+            'osName' => PHP_OS,
+            'url' => route('password.request')
+        ];
+        if(!$loginRequestRemember) {
+            Notification::send($user, new NotifyLogin($data));
+        }
         $request->authenticate();
 
         $request->session()->regenerate();
