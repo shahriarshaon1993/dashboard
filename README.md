@@ -7,5 +7,6 @@ dashboard is private CMS for personal project management system using Bootstrap,
 -   Install `composer require laravel/breeze --dev`
 -   Install `composer require laravel/horizon`
 -   Install `composer require predis/predis`
+-   Install `composer require barryvdh/laravel-debugbar --dev`
 
 The dashboard is private software licensed under the [MIT license](https://opensource.org/licenses/MIT).
