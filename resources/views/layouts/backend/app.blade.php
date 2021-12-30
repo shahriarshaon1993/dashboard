@@ -9,7 +9,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
         <meta name="description" content="This is an example dashboard created using build-in elements and components.">
         <meta name="msapplication-tap-highlight" content="no">
+
         <link href="{{ asset('backend/main.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/iziToast.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/backend.css') }}" rel="stylesheet">
+        @stack('css')
     </head>
 
     <body>
@@ -40,6 +44,13 @@
                 <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
             </div>
         </div>
-        <script type="text/javascript" src="{{ asset('backend/assets/scripts/main.js') }}"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="{{ asset('js/app.js') }}"></script>
+        <script src="{{ asset('js/iziToast.js') }}"></script>
+        <script src="{{ asset('backend/assets/scripts/main.js') }}"></script>
+        <script src="{{ asset('js/script.js') }}"></script>
+
+        @include('vendor.lara-izitoast.toast')
+        @stack('js')
     </body>
 </html>

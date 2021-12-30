@@ -166,6 +166,8 @@ return [
          * Package Service Providers...
          */
         Barryvdh\Debugbar\ServiceProvider::class,
+        App\Providers\RepositoriesProvider::class,
+        LaraIzitoast\LaraIzitoastServiceProvider::class,
         /*
          * Application Service Providers...
          */

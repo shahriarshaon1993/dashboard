@@ -34,9 +34,15 @@
             <ul class="vertical-nav-menu">
                 <li class="app-sidebar__heading">Dashboards</li>
                 <li>
-                    <a href="index.html" class="mm-active">
+                    <a href="{{ route('admin.dashboard') }}" class="{{ Route::is('admin.dashboard') ? 'mm-active' : '' }}">
                         <i class="metismenu-icon pe-7s-rocket"></i>
-                        Dashboard Example 1
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.roles.index') }}" class="{{ Route::is('admin.roles.index') ? 'mm-active' : '' }}">
+                        <i class="metismenu-icon pe-7s-check"></i>
+                        Roles
                     </a>
                 </li>
                 <li class="app-sidebar__heading">UI Components</li>
