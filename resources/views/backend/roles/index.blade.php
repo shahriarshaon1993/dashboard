@@ -15,6 +15,7 @@
                 </div>
             </div>
         </div>
+        @permission('admin.roles.create')
         <div class="page-title-actions">
             <div class="d-inline-block dropdown">
                 <a href="{{ route('admin.roles.create') }}" class="btn-shadow btn btn-primary">
@@ -25,6 +26,7 @@
                 </a>
             </div>
         </div>
+        @endpermission
     </x-slot>
 
     <div class="row">
@@ -59,21 +61,25 @@
                                     </td>
                                     <td class="text-center">{{ $role->updated_at->diffForHumans() }}</td>
                                     <td class="text-center">
-                                        <a href="{{ route('admin.roles.edit', $role->id) }}" class="btn btn-info btn-sm">
-                                            <i class="fas fa-edit"></i>
-                                            <span>Edit</span>
-                                        </a>
+                                        @permission('admin.roles.edit')
+                                            <a href="{{ route('admin.roles.edit', $role->id) }}" class="btn btn-info btn-sm">
+                                                <i class="fas fa-edit"></i>
+                                                <span>Edit</span>
+                                            </a>
+                                        @endpermission
 
                                         @if ($role->deletable == true)
-                                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteData({{ $role->id }})">
-                                                <i class="fas fa-trash-alt"></i>
-                                                <span>Delete</span>
-                                            </button>
+                                            @permission('admin.roles.destroy')
+                                                <button type="button" class="btn btn-danger btn-sm" onclick="deleteData({{ $role->id }})">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                    <span>Delete</span>
+                                                </button>
 
-                                            <form id="delete-form-{{ $role->id }}" method="POST" action="{{ route('admin.roles.destroy', $role->id) }}" class="d-none">
-                                                @csrf
-                                                @method('DELETE')
-                                            </form>
+                                                <form id="delete-form-{{ $role->id }}" method="POST" action="{{ route('admin.roles.destroy', $role->id) }}" class="d-none">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                </form>
+                                            @endpermission
                                         @endif
                                     </td>
                                 </tr>

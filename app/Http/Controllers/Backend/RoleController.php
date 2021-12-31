@@ -6,8 +6,10 @@ use App\Models\Role;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Backend\StoreRoleRequest;
+use Illuminate\Support\Facades\Gate;
 use App\Interface\Backend\RoleInterface;
+use App\Http\Requests\Backend\StoreRoleRequest;
+use App\Repositories\Backend\RoleRepository;
 
 class RoleController extends Controller
 {
@@ -25,6 +27,7 @@ class RoleController extends Controller
      */
     public function index()
     {
+        Gate::authorize('admin.roles.access');
         $roles = Role::withCount('permissions')->get();
         return view('backend.roles.index', compact('roles'));
     }
@@ -36,6 +39,7 @@ class RoleController extends Controller
      */
     public function create()
     {
+        Gate::authorize('admin.roles.create');
         $modules = $this->roleRepo->getAllModule();
         return view('backend.roles.form', compact('modules'));
     }
@@ -48,6 +52,7 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request)
     {
+        Gate::authorize('admin.roles.create');
         Role::create([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
@@ -64,6 +69,7 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
+        Gate::authorize('admin.roles.edit');
         $modules = $this->roleRepo->getAllModule();
         return view('backend.roles.form', compact('modules', 'role'));
     }
@@ -77,6 +83,7 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
+        Gate::authorize('admin.roles.edit');
         $role->update([
             'name' => $request->name,
             'slug' => Str::slug($request->name)
@@ -94,6 +101,7 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+        Gate::authorize('admin.roles.destroy');
         if ($role->deletable) {
             $role->delete();
             notify()->success("Role deleted","Success","topCenter");
