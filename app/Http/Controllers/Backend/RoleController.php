@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 use App\Interface\Backend\RoleInterface;
 use App\Http\Requests\Backend\StoreRoleRequest;
-use App\Repositories\Backend\RoleRepository;
 
 class RoleController extends Controller
 {
@@ -18,6 +17,7 @@ class RoleController extends Controller
     public function __construct(RoleInterface $roleRepo)
     {
         $this->roleRepo = $roleRepo;
+        $this->middleware(['auth', 'verified']);
     }
 
     /**
