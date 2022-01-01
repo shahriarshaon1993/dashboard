@@ -1,4 +1,7 @@
 <x-app-layout>
+
+    @section('title', 'create role')
+
     <x-slot name="header">
         <div class="page-title-heading">
             <div class="page-title-icon">
@@ -17,7 +20,7 @@
                     <span class="btn-icon-wrapper pr-2 opacity-7">
                         <i class="fa fa-arrow-left"></i>
                     </span>
-                    Back
+                    Back to list
                 </a>
             </div>
         </div>

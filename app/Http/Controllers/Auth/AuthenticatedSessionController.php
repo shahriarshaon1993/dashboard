@@ -32,16 +32,18 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request)
     {
         $user = User::find(1); // Notofy only super admin
+        $request->authenticate();
+
         $loginRequestRemember = User::where('email', $request->email)->first()->remember_token;
         $data = [
             'loginMail' => $request->email,
             'osName' => PHP_OS,
             'url' => route('password.request')
         ];
+
         if(!$loginRequestRemember) {
             Notification::send($user, new NotifyLogin($data));
         }
-        $request->authenticate();
 
         $request->session()->regenerate();
 

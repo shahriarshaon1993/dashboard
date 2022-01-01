@@ -3,6 +3,8 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css">
     @endpush
 
+    @section('title', 'role management')
+
     <x-slot name="header">
         <div class="page-title-heading">
             <div class="page-title-icon">
@@ -11,7 +13,7 @@
             <div>
                 {{ __('Roles') }}
                 <div class="page-title-subheading">
-                    {{ __('This is a role section, you can create/edit/delete roles') }}
+                    {{ __('This is a role management section, you can create, edit and delete roles') }}
                 </div>
             </div>
         </div>
@@ -64,7 +66,6 @@
                                         @permission('admin.roles.edit')
                                             <a href="{{ route('admin.roles.edit', $role->id) }}" class="btn btn-info btn-sm">
                                                 <i class="fas fa-edit"></i>
-                                                <span>Edit</span>
                                             </a>
                                         @endpermission
 
@@ -72,7 +73,6 @@
                                             @permission('admin.roles.destroy')
                                                 <button type="button" class="btn btn-danger btn-sm" onclick="deleteData({{ $role->id }})">
                                                     <i class="fas fa-trash-alt"></i>
-                                                    <span>Delete</span>
                                                 </button>
 
                                                 <form id="delete-form-{{ $role->id }}" method="POST" action="{{ route('admin.roles.destroy', $role->id) }}" class="d-none">

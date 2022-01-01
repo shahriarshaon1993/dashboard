@@ -45,6 +45,12 @@
                         Roles
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('admin.users.index') }}" class="{{ Route::is('admin.users.index') ? 'mm-active' : '' }}">
+                        <i class="metismenu-icon pe-7s-users"></i>
+                        Users
+                    </a>
+                </li>
                 <li class="app-sidebar__heading">UI Components</li>
                 <li>
                     <a href="#">

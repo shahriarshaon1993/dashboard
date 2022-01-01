@@ -23,7 +23,9 @@ class UserSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@mail.com',
             'email_verified_at' => now(),
-            'password' => Hash::make('password')
+            'password' => Hash::make('password'),
+            'deletable' => false,
+            'status' => true
         ]);
 
         // Create user
@@ -33,7 +35,9 @@ class UserSeeder extends Seeder
             'name' => 'Jone Doe',
             'email' => 'user@mail.com',
             'email_verified_at' => now(),
-            'password' => Hash::make('password')
+            'password' => Hash::make('password'),
+            'deletable' => false,
+            'status' => true
         ]);
     }
 }

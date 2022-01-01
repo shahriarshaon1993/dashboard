@@ -4,10 +4,12 @@ namespace App\Providers;
 
 use App\Interface\Backend\{
     RoleInterface,
+    UserInterface,
 };
 
 use App\Repositories\Backend\{
     RoleRepository,
+    UserRepository,
 };
 
 use Illuminate\Support\ServiceProvider;
@@ -25,6 +27,12 @@ class RepositoriesProvider extends ServiceProvider
         $this->app->bind(
             RoleInterface::class,
             RoleRepository::class
+        );
+
+        // Repositroy & Inderface bind for User
+        $this->app->bind(
+            UserInterface::class,
+            UserRepository::class
         );
     }
 
