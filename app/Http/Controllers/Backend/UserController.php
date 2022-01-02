@@ -7,7 +7,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Backend\StoreUserRequest;
 use App\Http\Requests\Backend\UpdateUserRequest;
 use App\Interface\Backend\UserInterface;
@@ -19,7 +18,6 @@ class UserController extends Controller
     public function __construct(UserInterface $userRepo)
     {
         $this->userRepo = $userRepo;
-        $this->middleware(['auth', 'verified']);
     }
 
     /**

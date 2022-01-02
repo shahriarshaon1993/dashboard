@@ -17,7 +17,6 @@ class RoleController extends Controller
     public function __construct(RoleInterface $roleRepo)
     {
         $this->roleRepo = $roleRepo;
-        $this->middleware(['auth', 'verified']);
     }
 
     /**

@@ -18,7 +18,6 @@ class BackupController extends Controller
     public function __construct(BackupInterface $backupsRepo)
     {
         $this->backupsRepo = $backupsRepo;
-        $this->middleware(['auth', 'verified']);
     }
 
     /**
