@@ -40,15 +40,21 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.roles.index') }}" class="{{ Route::is('admin.roles.index') ? 'mm-active' : '' }}">
+                    <a href="{{ route('admin.roles.index') }}" class="{{ Request::is('admin/roles*') ? 'mm-active' : '' }}">
                         <i class="metismenu-icon pe-7s-check"></i>
                         Roles
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.users.index') }}" class="{{ Route::is('admin.users.index') ? 'mm-active' : '' }}">
+                    <a href="{{ route('admin.users.index') }}" class="{{ Request::is('admin/users*') ? 'mm-active' : '' }}">
                         <i class="metismenu-icon pe-7s-users"></i>
                         Users
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.backups.index') }}" class="{{ Request::is('admin/backups*') ? 'mm-active' : '' }}">
+                        <i class="metismenu-icon pe-7s-cloud"></i>
+                        Backups
                     </a>
                 </li>
                 <li class="app-sidebar__heading">UI Components</li>
