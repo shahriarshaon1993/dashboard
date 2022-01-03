@@ -4,12 +4,14 @@ namespace App\Providers;
 
 use App\Interface\Backend\{
     BackupInterface,
+    ProfileInterface,
     RoleInterface,
     UserInterface,
 };
 
 use App\Repositories\Backend\{
     BackupRepository,
+    ProfileRepository,
     RoleRepository,
     UserRepository,
 };
@@ -41,6 +43,12 @@ class RepositoriesProvider extends ServiceProvider
         $this->app->bind(
             BackupInterface::class,
             BackupRepository::class
+        );
+
+        // Repositroy & Inderface bind for Profile
+        $this->app->bind(
+            ProfileInterface::class,
+            ProfileRepository::class
         );
     }
 

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Backend\{
     BackupController,
     DashboardController,
+    ProfileController,
     RoleController,
     UserController,
 };
@@ -17,6 +18,14 @@ Route::resource('/roles', RoleController::class)->except('show');
 Route::post('/users/{id}/restore', [UserController::class, 'restore'])->name('user.restore');
 Route::delete('/users/{id}/forcedelete', [UserController::class, 'forceDelete'])->name('user.forcedelete');
 Route::resource('/users', UserController::class);
+
+// Profile
+Route::get('profile', [ProfileController::class, 'index'])->name('profile.index');
+Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+
+// Security
+Route::get('profile/security', [ProfileController::class, 'changePassword'])->name('profile.password.change');
+Route::put('profile/security', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 
 // Backups
 Route::resource('backups', BackupController::class)->only(['index', 'store', 'destroy']);

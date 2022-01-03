@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use Throwable;
 use App\Models\Role;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -27,8 +28,14 @@ class RoleController extends Controller
     public function index()
     {
         Gate::authorize('admin.roles.access');
-        $roles = Role::withCount('permissions')->get();
-        return view('backend.roles.index', compact('roles'));
+        try {
+            $roles = Role::withCount('permissions')->get();
+            return view('backend.roles.index', compact('roles'));
+        }catch (Throwable $exception) {
+            report($exception);
+            notify()->error($exception->getMessage(),"Error","topCenter");
+            return back();
+        }
     }
 
     /**
@@ -39,8 +46,14 @@ class RoleController extends Controller
     public function create()
     {
         Gate::authorize('admin.roles.create');
-        $modules = $this->roleRepo->getAllModule();
-        return view('backend.roles.form', compact('modules'));
+        try {
+            $modules = $this->roleRepo->getAllModule();
+            return view('backend.roles.form', compact('modules'));
+        }catch (Throwable $exception) {
+            report($exception);
+            notify()->error($exception->getMessage(),"Error","topCenter");
+            return back();
+        }
     }
 
     /**
@@ -52,12 +65,18 @@ class RoleController extends Controller
     public function store(StoreRoleRequest $request)
     {
         Gate::authorize('admin.roles.create');
-        Role::create([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-        ])->permissions()->sync($request->input('permissions', []));
-        notify()->success("Role added","Success","topCenter");
-        return back();
+        try {
+            Role::create([
+                'name' => $request->name,
+                'slug' => Str::slug($request->name),
+            ])->permissions()->sync($request->input('permissions', []));
+            notify()->success("Role added","Success","topCenter");
+            return back();
+        }catch (Throwable $exception) {
+            report($exception);
+            notify()->error($exception->getMessage(),"Error","topCenter");
+            return back();
+        }
     }
 
     /**
@@ -69,8 +88,14 @@ class RoleController extends Controller
     public function edit(Role $role)
     {
         Gate::authorize('admin.roles.edit');
-        $modules = $this->roleRepo->getAllModule();
-        return view('backend.roles.form', compact('modules', 'role'));
+        try {
+            $modules = $this->roleRepo->getAllModule();
+            return view('backend.roles.form', compact('modules', 'role'));
+        }catch (Throwable $exception) {
+            report($exception);
+            notify()->error($exception->getMessage(),"Error","topCenter");
+            return back();
+        }
     }
 
     /**
@@ -83,13 +108,19 @@ class RoleController extends Controller
     public function update(Request $request, Role $role)
     {
         Gate::authorize('admin.roles.edit');
-        $role->update([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name)
-        ]);
-        notify()->success("Role updated","Success","topCenter");
-        $role->permissions()->sync($request->input('permissions', []));
-        return back();
+        try {
+            $role->update([
+                'name' => $request->name,
+                'slug' => Str::slug($request->name)
+            ]);
+            notify()->success("Role updated","Success","topCenter");
+            $role->permissions()->sync($request->input('permissions', []));
+            return back();
+        }catch (Throwable $exception) {
+            report($exception);
+            notify()->error($exception->getMessage(),"Error","topCenter");
+            return back();
+        }
     }
 
     /**
@@ -101,12 +132,18 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         Gate::authorize('admin.roles.destroy');
-        if ($role->deletable) {
-            $role->delete();
-            notify()->success("Role deleted","Success","topCenter");
-        } else {
-            notify()->error("You can\'t delete system role.","Error","topCenter");
+        try {
+            if ($role->deletable) {
+                $role->delete();
+                notify()->success("Role deleted","Success","topCenter");
+            } else {
+                notify()->error("You can\'t delete system role.","Error","topCenter");
+            }
+            return back();
+        }catch (Throwable $exception) {
+            report($exception);
+            notify()->error($exception->getMessage(),"Error","topCenter");
+            return back();
         }
-        return back();
     }
 }

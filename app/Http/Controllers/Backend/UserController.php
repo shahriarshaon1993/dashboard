@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\Role;
+use Throwable;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
+use App\Interface\Backend\UserInterface;
 use App\Http\Requests\Backend\StoreUserRequest;
 use App\Http\Requests\Backend\UpdateUserRequest;
-use App\Interface\Backend\UserInterface;
 
 class UserController extends Controller
 {
@@ -28,15 +28,19 @@ class UserController extends Controller
     public function index(Request $request)
     {
         Gate::authorize('admin.users.access');
-
-        if($request->has('archive')) {
-            $isTrashed = true;
-        }else {
-            $isTrashed = false;
+        try {
+            if($request->has('archive')) {
+                $isTrashed = true;
+            }else {
+                $isTrashed = false;
+            }
+            $users = $this->userRepo->getAllUsers($request);
+            return view('backend.users.index', compact('users', 'isTrashed'));
+        }catch (Throwable $exception) {
+            report($exception);
+            notify()->error($exception->getMessage(),"Error","topCenter");
+            return back();
         }
-
-        $users = $this->userRepo->getAllUsers($request);
-        return view('backend.users.index', compact('users', 'isTrashed'));
     }
 
     /**
@@ -47,8 +51,14 @@ class UserController extends Controller
     public function create()
     {
         Gate::authorize('admin.users.create');
-        $roles = $this->userRepo->getAllRoles();
-        return view('backend.users.form', compact('roles'));
+        try {
+            $roles = $this->userRepo->getAllRoles();
+            return view('backend.users.form', compact('roles'));
+        }catch (Throwable $exception) {
+            report($exception);
+            notify()->error($exception->getMessage(),"Error","topCenter");
+            return back();
+        }
     }
 
     /**
@@ -60,9 +70,15 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         Gate::authorize('admin.users.create');
-        $this->userRepo->storeUpdateUser($request);
-        notify()->success("User created","Success","topCenter");
-        return back();
+        try {
+            $this->userRepo->storeUpdateUser($request);
+            notify()->success("User created","Success","topCenter");
+            return back();
+        }catch (Throwable $exception) {
+            report($exception);
+            notify()->error($exception->getMessage(),"Error","topCenter");
+            return back();
+        }
     }
 
     /**
@@ -86,8 +102,14 @@ class UserController extends Controller
     public function edit(User $user)
     {
         Gate::authorize('admin.users.edit');
-        $roles = $this->userRepo->getAllRoles();
-        return view('backend.users.form', compact('roles', 'user'));
+        try {
+            $roles = $this->userRepo->getAllRoles();
+            return view('backend.users.form', compact('roles', 'user'));
+        }catch (Throwable $exception) {
+            report($exception);
+            notify()->error($exception->getMessage(),"Error","topCenter");
+            return back();
+        }
     }
 
     /**
@@ -100,9 +122,15 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         Gate::authorize('admin.users.edit');
-        $this->userRepo->storeUpdateUser($request, $user);
-        notify()->success("User updated","Success","topCenter");
-        return back();
+        try {
+            $this->userRepo->storeUpdateUser($request, $user);
+            notify()->success("User updated","Success","topCenter");
+            return back();
+        }catch (Throwable $exception) {
+            report($exception);
+            notify()->error($exception->getMessage(),"Error","topCenter");
+            return back();
+        }
     }
 
     /**
@@ -114,13 +142,19 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         Gate::authorize('admin.users.destroy');
-        if ($user->deletable) {
-            $user->delete();
-            notify()->success("User deleted","Success","topCenter");
-        } else {
-            notify()->error("You can\'t delete system user.","Error","topCenter");
+        try {
+            if ($user->deletable) {
+                $user->delete();
+                notify()->success("Successfully move to trash","Success","topCenter");
+            } else {
+                notify()->error("You can\'t delete system user.","Error","topCenter");
+            }
+            return back();
+        }catch (Throwable $exception) {
+            report($exception);
+            notify()->error($exception->getMessage(),"Error","topCenter");
+            return back();
         }
-        return back();
     }
 
     /**
@@ -132,11 +166,17 @@ class UserController extends Controller
     public function restore($id)
     {
         Gate::authorize('admin.users.destroy');
-        $user = User::onlyTrashed()->findOrFail($id);
-        $user->restore();
+        try {
+            $user = User::onlyTrashed()->findOrFail($id);
+            $user->restore();
 
-        notify()->success("User restore","Success","topCenter");
-        return back();
+            notify()->success("User restore","Success","topCenter");
+            return back();
+        }catch (Throwable $exception) {
+            report($exception);
+            notify()->error($exception->getMessage(),"Error","topCenter");
+            return back();
+        }
     }
 
     /**
@@ -148,10 +188,16 @@ class UserController extends Controller
     public function forceDelete($id)
     {
         Gate::authorize('admin.users.destroy');
-        $user = User::onlyTrashed()->findOrFail($id);
-        $user->forceDelete();
+        try {
+            $user = User::onlyTrashed()->findOrFail($id);
+            $user->forceDelete();
 
-        notify()->success("User permanently deleted","Success","topCenter");
-        return back();
+            notify()->success("User permanently deleted","Success","topCenter");
+            return back();
+        }catch (Throwable $exception) {
+            report($exception);
+            notify()->error($exception->getMessage(),"Error","topCenter");
+            return back();
+        }
     }
 }
