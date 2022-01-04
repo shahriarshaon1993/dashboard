@@ -3,6 +3,7 @@
 use App\Http\Controllers\Backend\{
     BackupController,
     DashboardController,
+    PageController,
     ProfileController,
     RoleController,
     UserController,
@@ -31,3 +32,6 @@ Route::put('profile/security', [ProfileController::class, 'updatePassword'])->na
 Route::resource('backups', BackupController::class)->only(['index', 'store', 'destroy']);
 Route::get('backups/{file_name}', [BackupController::class, 'download'])->name('backups.download');
 Route::delete('backups', [BackupController::class, 'clean'])->name('backups.clean');
+
+// Pages
+Route::resource('/pages', PageController::class);
