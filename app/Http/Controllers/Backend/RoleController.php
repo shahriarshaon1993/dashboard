@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Backend;
 use Throwable;
 use App\Models\Role;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 use App\Interface\Backend\RoleInterface;
 use App\Http\Requests\Backend\StoreRoleRequest;
+use App\Http\Requests\Backend\UpdateRoleRequest;
 
 class RoleController extends Controller
 {
@@ -68,7 +68,7 @@ class RoleController extends Controller
         try {
             Role::create([
                 'name' => $request->name,
-                'slug' => Str::slug($request->name),
+                'slug' => Str::slug($request->name)
             ])->permissions()->sync($request->input('permissions', []));
             notify()->success("Role added","Success","topCenter");
             return back();
@@ -105,7 +105,7 @@ class RoleController extends Controller
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(UpdateRoleRequest $request, Role $role)
     {
         Gate::authorize('admin.roles.edit');
         try {
@@ -115,7 +115,7 @@ class RoleController extends Controller
             ]);
             notify()->success("Role updated","Success","topCenter");
             $role->permissions()->sync($request->input('permissions', []));
-            return back();
+            return redirect()->route('admin.roles.edit', $role->slug);
         }catch (Throwable $exception) {
             report($exception);
             notify()->error($exception->getMessage(),"Error","topCenter");

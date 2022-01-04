@@ -38,7 +38,7 @@
 
     <div class="row">
         <div class="col-12">
-            <form method="POST" action="{{ isset($user) ? route('admin.users.update', $user->id) : route('admin.users.store') }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ isset($user) ? route('admin.users.update', $user->slug) : route('admin.users.store') }}" enctype="multipart/form-data">
                 @csrf
                 @isset($user)
                     @method('PUT')

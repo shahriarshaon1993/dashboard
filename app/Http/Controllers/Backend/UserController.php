@@ -125,7 +125,7 @@ class UserController extends Controller
         try {
             $this->userRepo->storeUpdateUser($request, $user);
             notify()->success("User updated","Success","topCenter");
-            return back();
+            return redirect()->route('admin.users.edit', $user->slug);
         }catch (Throwable $exception) {
             report($exception);
             notify()->error($exception->getMessage(),"Error","topCenter");
@@ -166,17 +166,24 @@ class UserController extends Controller
     public function restore($id)
     {
         Gate::authorize('admin.users.destroy');
-        try {
-            $user = User::onlyTrashed()->findOrFail($id);
-            $user->restore();
+        $user = User::onlyTrashed()->findOrFail($id);
+        $user->restore();
 
-            notify()->success("User restore","Success","topCenter");
-            return back();
-        }catch (Throwable $exception) {
-            report($exception);
-            notify()->error($exception->getMessage(),"Error","topCenter");
-            return back();
-        }
+        notify()->success("User restore","Success","topCenter");
+        return back();
+
+
+        // try {
+        //     $user = User::onlyTrashed()->findOrFail($slug);
+        //     $user->restore();
+
+        //     notify()->success("User restore","Success","topCenter");
+        //     return back();
+        // }catch (Throwable $exception) {
+        //     report($exception);
+        //     notify()->error($exception->getMessage(),"Error","topCenter");
+        //     return back();
+        // }
     }
 
     /**
@@ -185,11 +192,11 @@ class UserController extends Controller
      * @param  mixed $id
      * @return void
      */
-    public function forceDelete($id)
+    public function forceDelete($slug)
     {
         Gate::authorize('admin.users.destroy');
         try {
-            $user = User::onlyTrashed()->findOrFail($id);
+            $user = User::onlyTrashed()->findOrFail($slug);
             $user->forceDelete();
 
             notify()->success("User permanently deleted","Success","topCenter");

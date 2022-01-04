@@ -21,6 +21,7 @@ class UserSeeder extends Seeder
         User::updateOrCreate([
             'role_id' => $adminRole->id,
             'name' => 'Shahriar Shaon',
+            'slug' => 'shahriar-shaon',
             'email' => 'admin@mail.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
@@ -33,6 +34,7 @@ class UserSeeder extends Seeder
         User::updateOrCreate([
             'role_id' => $userRole->id,
             'name' => 'Jone Doe',
+            'slug' => 'jone-doe',
             'email' => 'user@mail.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),

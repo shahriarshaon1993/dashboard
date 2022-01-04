@@ -28,6 +28,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
      */
     protected $fillable = [
         'name',
+        'slug',
         'email',
         'password',
         'role_id',
@@ -54,6 +55,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Upload user photo with thum size width: 160, height: 120.
+     *
+     * @return void
+     */
     public function registerMediaCollections(): void
     {
         $this
@@ -66,11 +72,35 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
             });
     }
 
+    /**
+     * Route model binding using slug for query.
+     *
+     * @param  mixed $value
+     * @param  mixed $field
+     * @return void
+     */
+    public function resolveRouteBinding($value, $field = null)
+    {
+        return $this->where('slug', $value)->firstOrFail();
+    }
+
+    /**
+     * This is belongsTo relation with Role model.
+     *
+     * @return void
+     */
     public function role()
     {
         return $this->belongsTo(Role::class);
     }
 
+    /**
+     * Give permission that request slug or role permission slug have or not
+     * This is allows return boolen type value.
+     *
+     * @param  mixed $permission
+     * @return bool
+     */
     public function hasPermission($permission): bool
     {
         return $this->role->permissions()->where('slug', $permission)->first() ? true : false;

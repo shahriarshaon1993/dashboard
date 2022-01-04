@@ -22,7 +22,7 @@
                     Back to list
                 </a>
                 @permission('admin.users.edit')
-                    <a href="{{ route('admin.users.edit', $user->id) }}" class="btn-shadow btn btn-info">
+                    <a href="{{ route('admin.users.edit', $user->slug) }}" class="btn-shadow btn btn-info">
                         <span class="btn-icon-wrapper pr-2 opacity-7">
                             <i class="fas fa-edit"></i>
                         </span>

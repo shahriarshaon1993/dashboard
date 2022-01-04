@@ -64,7 +64,7 @@
                                     <td class="text-center">{{ $role->updated_at->diffForHumans() }}</td>
                                     <td class="text-center">
                                         @permission('admin.roles.edit')
-                                            <a href="{{ route('admin.roles.edit', $role->id) }}" class="btn btn-info btn-sm">
+                                            <a href="{{ route('admin.roles.edit', $role->slug) }}" class="btn btn-info btn-sm">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                         @endpermission
@@ -75,7 +75,7 @@
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
 
-                                                <form id="delete-form-{{ $role->id }}" method="POST" action="{{ route('admin.roles.destroy', $role->id) }}" class="d-none">
+                                                <form id="delete-form-{{ $role->id }}" method="POST" action="{{ route('admin.roles.destroy', $role->slug) }}" class="d-none">
                                                     @csrf
                                                     @method('DELETE')
                                                 </form>

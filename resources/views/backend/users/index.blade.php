@@ -120,11 +120,11 @@
                                                 @method('DELETE')
                                             </form>
                                         @else
-                                            <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-info btn-sm">
+                                            <a href="{{ route('admin.users.show', $user->slug) }}" class="btn btn-info btn-sm">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                             @permission('admin.users.edit')
-                                                <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-info btn-sm">
+                                                <a href="{{ route('admin.users.edit', $user->slug) }}" class="btn btn-info btn-sm">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                             @endpermission
@@ -135,7 +135,7 @@
                                                         <i class="fas fa-trash-alt"></i>
                                                     </button>
 
-                                                    <form id="delete-form-{{ $user->id }}" method="POST" action="{{ route('admin.users.destroy', $user->id) }}" class="d-none">
+                                                    <form id="delete-form-{{ $user->id }}" method="POST" action="{{ route('admin.users.destroy', $user->slug) }}" class="d-none">
                                                         @csrf
                                                         @method('DELETE')
                                                     </form>

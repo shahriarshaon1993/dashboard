@@ -29,7 +29,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="main-card mb-3 card">
-                <form method="POST" action="{{ isset($role) ? route('admin.roles.update', $role->id) : route('admin.roles.store') }}"">
+                <form method="POST" action="{{ isset($role) ? route('admin.roles.update', $role->slug) : route('admin.roles.store') }}"">
                     @csrf
                     @isset($role)
                         @method('PUT')

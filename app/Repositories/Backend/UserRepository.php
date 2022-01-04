@@ -4,6 +4,7 @@ namespace App\Repositories\Backend;
 
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use App\Interface\Backend\UserInterface;
 
@@ -40,7 +41,8 @@ class UserRepository implements UserInterface
             $user->update([
                 'role_id' => $request->role,
                 'name' => $request->name,
-                'email' => $request->email,
+                'slug' => Str::slug($request->name),
+                'email' => Str::lower($request->email),
                 'password' => isset($request->password) ? Hash::make($request->password) : $user->password,
                 'status' => $request->filled('status'),
             ]);
@@ -55,7 +57,8 @@ class UserRepository implements UserInterface
             $user = User::create([
                 'role_id' => $request->role,
                 'name' => $request->name,
-                'email' => $request->email,
+                'slug' => Str::slug($request->name),
+                'email' => Str::lower($request->email),
                 'password' => Hash::make($request->password),
                 'status' => $request->filled('status'),
             ]);

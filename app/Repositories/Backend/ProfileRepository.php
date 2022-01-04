@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Backend;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Interface\Backend\ProfileInterface;
@@ -15,7 +16,7 @@ class ProfileRepository implements ProfileInterface
         // Update user info
         $user->update([
             'name' => $request->name,
-            'email' => $request->email
+            'email' => Str::lower($request->email)
         ]);
         // Image upload
         if ($request->hasFile('avatar')) {
