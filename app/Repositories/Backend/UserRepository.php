@@ -36,8 +36,7 @@ class UserRepository implements UserInterface
 
     public function storeUpdateUser($request, $user = null)
     {
-        if($user)
-        {
+        if($user) {
             $user->update([
                 'role_id' => $request->role,
                 'name' => $request->name,

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Frontend\PageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return "done";
 });
+
+// Dinamic page route | This route allows define in the end
+Route::get('{slug}', [PageController::class, 'index'])->name('page');

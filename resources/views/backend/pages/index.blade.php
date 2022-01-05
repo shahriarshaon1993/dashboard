@@ -55,7 +55,7 @@
                                         {{ $page->title }}
                                     </td>
                                     <td class="text-center">
-                                        <a href="">{{ $page->slug }}</a>
+                                        <a href="{{ route('page', $page->slug) }}">{{ $page->slug }}</a>
                                     </td>
                                     <td class="text-center">
                                         @if ($page->status == true)
@@ -71,17 +71,15 @@
                                     <td class="text-center">{{ $page->updated_at->diffForHumans() }}</td>
                                     <td class="text-center">
 
-                                        <a href="{{ route('admin.pages.edit', $page->id) }}" class="btn btn-info btn-sm">
+                                        <a href="{{ route('admin.pages.edit', $page->slug) }}" class="btn btn-info btn-sm">
                                             <i class="fas fa-edit"></i>
-                                            <span>Edit</span>
                                         </a>
 
                                         <button type="button" class="btn btn-danger btn-sm" onclick="deleteData({{ $page->id }})">
                                             <i class="fas fa-trash-alt"></i>
-                                            <span>Delete</span>
                                         </button>
 
-                                        <form id="delete-form-{{ $page->id }}" method="POST" action="{{ route('admin.pages.destroy', $page->id) }}" class="d-none">
+                                        <form id="delete-form-{{ $page->id }}" method="POST" action="{{ route('admin.pages.destroy', $page->slug) }}" class="d-none">
                                             @csrf
                                             @method('DELETE')
                                         </form>

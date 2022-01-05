@@ -52,6 +52,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('admin.pages.index') }}" class="{{ Request::is('admin/pages*') ? 'mm-active' : '' }}">
+                        <i class="metismenu-icon pe-7s-news-paper"></i>
+                        Pages
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('admin.backups.index') }}" class="{{ Request::is('admin/backups*') ? 'mm-active' : '' }}">
                         <i class="metismenu-icon pe-7s-cloud"></i>
                         Backups

@@ -2,13 +2,24 @@
 
 namespace App\Http\Controllers\Backend;
 
+use Throwable;
 use App\Models\Page;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
+use App\Interface\Backend\PageInterface;
+use App\Http\Requests\Backend\StorePageRequest;
+use App\Http\Requests\Backend\UpdatePageRequest;
+use Illuminate\Support\Facades\Request;
 
 class PageController extends Controller
 {
+    public $pageRepo;
+
+    public function __construct(PageInterface $pageRepo)
+    {
+        $this->pageRepo = $pageRepo;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +28,7 @@ class PageController extends Controller
     public function index()
     {
         Gate::authorize('admin.pages.access');
-        $pages = Page::all();
+        $pages = Page::latest('id')->get();
         return view('backend.pages.index', compact('pages'));
     }
 
@@ -38,9 +49,39 @@ class PageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePageRequest $request)
     {
-        //
+        Gate::authorize('admin.pages.create');
+        try {
+            $this->pageRepo->storeUpdatePageInfo($request);
+            notify()->success("Page Successfully Added.","Added","topCenter");
+            return back();
+        }catch (Throwable $exception) {
+            report($exception);
+            notify()->error($exception->getMessage(),"Error","topCenter");
+            return back();
+        }
+    }
+
+    /**
+     * For upload text editor image
+     *
+     * @return void
+     */
+    public function storeImage()
+    {
+        Gate::authorize('admin.pages.create');
+        $page = new Page();
+        $page->id = 0;
+        $page->exists = true;
+
+        $image = $page
+                    ->addMediaFromRequest('upload')
+                    ->toMediaCollection('page-image');
+
+        return response()->json([
+            'url' => $image->getUrl() //'https://i.ibb.co/PNvkdNF/original.jpg'
+        ]);
     }
 
     /**
@@ -62,7 +103,8 @@ class PageController extends Controller
      */
     public function edit(Page $page)
     {
-        //
+        Gate::authorize('admin.pages.edit');
+        return view('backend.pages.form', compact('page'));
     }
 
     /**
@@ -72,9 +114,18 @@ class PageController extends Controller
      * @param  \App\Models\Page  $page
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Page $page)
+    public function update(UpdatePageRequest $request, Page $page)
     {
-        //
+        Gate::authorize('admin.pages.edit');
+        try {
+            $this->pageRepo->storeUpdatePageInfo($request, $page);
+            notify()->success("Page successfully updated.","Updated","topCenter");
+            return redirect()->route('admin.pages.edit', $page->slug);
+        }catch (Throwable $exception) {
+            report($exception);
+            notify()->error($exception->getMessage(),"Error","topCenter");
+            return back();
+        }
     }
 
     /**
@@ -85,6 +136,16 @@ class PageController extends Controller
      */
     public function destroy(Page $page)
     {
-        //
+        Gate::authorize('admin.pages.destroy');
+        try {
+            $page->delete();
+            notify()->success("Page deleted","Deleted","topCenter");
+            return back();
+        }catch (Throwable $exception) {
+            report($exception);
+            notify()->error($exception->getMessage(),"Error","topCenter");
+            return back();
+        }
     }
+
 }

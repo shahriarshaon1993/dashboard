@@ -34,4 +34,5 @@ Route::get('backups/{file_name}', [BackupController::class, 'download'])->name('
 Route::delete('backups', [BackupController::class, 'clean'])->name('backups.clean');
 
 // Pages
+Route::post('/pages/image/upload', [PageController::class, 'storeImage'])->name('pages.image.upload');
 Route::resource('/pages', PageController::class);

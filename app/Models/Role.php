@@ -18,6 +18,13 @@ class Role extends Model
         'created_at', 'updated_at'
     ];
 
+    /**
+     * Route model binding using slug for query.
+     *
+     * @param  mixed $value
+     * @param  mixed $field
+     * @return void
+     */
     public function resolveRouteBinding($value, $field = null)
     {
         return $this->where('slug', $value)->firstOrFail();
