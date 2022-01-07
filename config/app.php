@@ -170,6 +170,7 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
         App\Providers\RepositoriesProvider::class,
         LaraIzitoast\LaraIzitoastServiceProvider::class,
+        browner12\helpers\HelperServiceProvider::class,
         /*
          * Application Service Providers...
          */

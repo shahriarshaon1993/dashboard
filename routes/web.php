@@ -14,8 +14,8 @@ use App\Http\Controllers\Frontend\PageController;
 |
 */
 
-Route::get('/', function () {
-    return "done";
+Route::get('/', function() {
+    return view('frontend.home');
 });
 
 // Dinamic page route | This route allows define in the end
