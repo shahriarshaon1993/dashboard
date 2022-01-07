@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\{
     PageController,
     ProfileController,
     RoleController,
+    SettingController,
     UserController,
 };
 use Illuminate\Support\Facades\Route;
@@ -36,3 +37,16 @@ Route::delete('backups', [BackupController::class, 'clean'])->name('backups.clea
 // Pages
 Route::post('/pages/image/upload', [PageController::class, 'storeImage'])->name('pages.image.upload');
 Route::resource('/pages', PageController::class);
+
+// Settings
+Route::as('settings.')->prefix('settings')->group(function () {
+    // General
+    Route::get('general', [SettingController::class, 'general'])->name('general');
+    Route::put('general', [SettingController::class, 'generalUpdate'])->name('general.update');
+    // Appearance
+    Route::get('appearance', [SettingController::class, 'appearance'])->name('appearance');
+    Route::put('appearance', [SettingController::class, 'appearanceUpdate'])->name('appearance.update');
+    // Mail
+    Route::get('mail', [SettingController::class, 'mail'])->name('mail');
+    Route::put('mail', [SettingController::class, 'mailUpdate'])->name('mail.update');
+});

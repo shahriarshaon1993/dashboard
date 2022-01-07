@@ -1,5 +1,7 @@
 <x-app-layout>
 
+    @section('title', '- Dashboard')
+
     <x-slot name="header">
         <div class="page-title-heading">
             <div class="page-title-icon">

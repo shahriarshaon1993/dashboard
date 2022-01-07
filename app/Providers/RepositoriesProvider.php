@@ -7,6 +7,8 @@ use App\Interface\Backend\{
     PageInterface,
     ProfileInterface,
     RoleInterface,
+    SetingInterface,
+    SettingInterface,
     UserInterface,
 };
 
@@ -15,6 +17,7 @@ use App\Repositories\Backend\{
     PageRepository,
     ProfileRepository,
     RoleRepository,
+    SettingRepository,
     UserRepository,
 };
 
@@ -57,6 +60,12 @@ class RepositoriesProvider extends ServiceProvider
         $this->app->bind(
             PageInterface::class,
             PageRepository::class
+        );
+
+        // Repositroy & Inderface bind for Page
+        $this->app->bind(
+            SettingInterface::class,
+            SettingRepository::class
         );
     }
 

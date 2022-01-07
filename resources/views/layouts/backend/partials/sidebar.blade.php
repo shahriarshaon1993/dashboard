@@ -31,7 +31,7 @@
     </div>
     <div class="scrollbar-sidebar">
         <div class="app-sidebar__inner">
-            <x-menu></x-menu>
+            <x-sidebar-menu></x-sidebar-menu>
         </div>
     </div>
 </div>

@@ -32,4 +32,10 @@
             Backups
         </a>
     </li>
+    <li>
+        <a href="{{ route('admin.settings.general') }}" class="{{ Request::is('admin/settings*') ? 'mm-active' : '' }}">
+            <i class="metismenu-icon pe-7s-settings"></i>
+            Settings
+        </a>
+    </li>
 </ul>

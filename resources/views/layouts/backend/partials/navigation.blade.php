@@ -1,6 +1,7 @@
 <div class="app-header header-shadow">
     <div class="app-header__logo">
         <div class="logo-src"></div>
+        {{ setting('site_title') }}
         <div class="header__pane ml-auto">
             <div>
                 <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
@@ -39,22 +40,16 @@
                 <button class="close"></button>
             </div>
             <ul class="header-menu nav">
-                <li class="nav-item">
-                    <a href="javascript:void(0);" class="nav-link">
-                        <i class="nav-link-icon fa fa-database"> </i>
-                        Statistics
+                <li class="dropdown nav-item">
+                    <a href="{{ route('admin.settings.general') }}" class="nav-link">
+                        <i class="nav-link-icon fa fa-cog"></i>
+                        Settings
                     </a>
                 </li>
                 <li class="btn-group nav-item">
-                    <a href="javascript:void(0);" class="nav-link">
+                    <a href="/" target="_blank" class="nav-link">
                         <i class="nav-link-icon fa fa-edit"></i>
-                        Projects
-                    </a>
-                </li>
-                <li class="dropdown nav-item">
-                    <a href="javascript:void(0);" class="nav-link">
-                        <i class="nav-link-icon fa fa-cog"></i>
-                        Settings
+                        View Site
                     </a>
                 </li>
             </ul>
