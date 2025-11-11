@@ -48,6 +48,7 @@ const handleExport = async () => {
         });
     } catch (error) {
         toast.error('Failed to export data. Please try again.');
+        console.error(error);
     } finally {
         exportLoading.value = false;
     }
