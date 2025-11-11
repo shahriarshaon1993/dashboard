@@ -1,33 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use App\Models\User;
+use App\Policies\DashboardPolicy;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\ServiceProvider;
 
-class AuthServiceProvider extends ServiceProvider
+// use Spatie\Permission\Models\Role;
+
+final class AuthServiceProvider extends ServiceProvider
 {
     /**
-     * The policy mappings for the application.
-     *
-     * @var array<class-string, class-string>
+     * Register services.
      */
-    protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
-    ];
+    public function register(): void
+    {
+        //
+    }
 
     /**
-     * Register any authentication / authorization services.
-     *
-     * @return void
+     * Bootstrap services.
      */
-    public function boot()
+    public function boot(): void
     {
-        $this->registerPolicies();
+        $this->configureSuperAdmin();
 
-        Gate::define('admin-dashboard', function (User $user) {
-            return $user->role->slug === 'admin';
-        });
+        Gate::define('access-dashboard', [DashboardPolicy::class, 'viewAny']);
+    }
+
+    /**
+     * Configure the super admin for have all permissions.
+     */
+    private function configureSuperAdmin(): void
+    {
+        Gate::before(fn (User $user): ?true => $user->hasRole('admin') ? true : null);
     }
 }

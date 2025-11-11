@@ -1,31 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
-use App\Models\Role;
-use App\Models\Permission;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
 
-class RoleSeeder extends Seeder
+final class RoleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $adminPermissions = Permission::all();
-        Role::updateOrCreate([
-            'name' => 'Admin',
-            'slug' => 'admin',
-            'deletable' => false
-        ])->permissions()->sync($adminPermissions->pluck('id'));
-
-        Role::updateOrCreate([
-            'name' => 'User',
-            'slug' => 'user',
-            'deletable' => false
-        ]);
+        Role::create(['name' => 'admin']);
+        Role::create(['name' => 'employee']);
+        Role::create(['name' => 'customer']);
     }
 }

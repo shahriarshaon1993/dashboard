@@ -1,26 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
-class EmailVerificationNotificationController extends Controller
+final class EmailVerificationNotificationController
 {
     /**
      * Send a new email verification notification.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        if ($request->user()->hasVerifiedEmail()) {
-            return redirect()->intended(RouteServiceProvider::HOME);
+        if ($request->user()?->hasVerifiedEmail()) {
+            return redirect()->intended(route('dashboard', absolute: false));
         }
 
-        $request->user()->sendEmailVerificationNotification();
+        $request->user()?->sendEmailVerificationNotification();
 
         return back()->with('status', 'verification-link-sent');
     }

@@ -1,42 +1,43 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Model;
+use Carbon\CarbonInterface;
+use Database\Factories\RoleFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Permission\Models\Role as SpiteRole;
 
-class Role extends Model
+/**
+ * App\Models\Role
+ *
+ * @property-read int $id
+ * @property-read string $name
+ * @property-read string $guard_name
+ * @property-read CarbonInterface $created_at
+ * @property-read CarbonInterface $updated_at
+ */
+final class Role extends SpiteRole
 {
+    /**
+     * @use HasFactory<RoleFactory>
+     */
     use HasFactory;
 
-    protected $table = "roles";
-
-    protected $guarded = ['id'];
-
-    protected $hidden = [
-        'created_at', 'updated_at'
-    ];
-
     /**
-     * Route model binding using slug for query.
+     * Get the attributes that should be cast.
      *
-     * @param  mixed $value
-     * @param  mixed $field
-     * @return void
+     * @return array<string, string>
      */
-    public function resolveRouteBinding($value, $field = null)
+    protected function casts(): array
     {
-        return $this->where('slug', $value)->firstOrFail();
-    }
-
-    public function permissions()
-    {
-        return $this->belongsToMany(Permission::class);
-    }
-
-    public function users()
-    {
-        return $this->hasMany(User::class);
+        return [
+            'id' => 'integer',
+            'name' => 'string',
+            'guard_name' => 'string',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
     }
 }

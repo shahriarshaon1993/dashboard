@@ -1,108 +1,82 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Laravel\Sanctum\HasApiTokens;
-use Spatie\MediaLibrary\HasMedia;
-use Illuminate\Notifications\Notifiable;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Dyrynda\Database\Support\CascadeSoftDeletes;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\ActiveStatus;
+use App\Traits\HasMedia;
+use Carbon\CarbonInterface;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\TwoFactorAuthenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements HasMedia, MustVerifyEmail
+/**
+ * App\Models\User
+ *
+ * @property-read int $id
+ * @property-read string $name
+ * @property-read string $email
+ * @property-read string $password
+ * @property-read string $phone
+ * @property-read ActiveStatus $is_active
+ * @property-read CarbonInterface $created_at
+ * @property-read CarbonInterface $updated_at
+ * @property-read CarbonInterface $email_verified_at
+ */
+final class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, InteractsWithMedia, SoftDeletes, CascadeSoftDeletes;
-
-    protected $table = "users";
-
-    // protected $cascadeDeletes = ['comments'];
+    /**
+     * @use HasMedia<User>
+     * @use HasFactory<UserFactory>
+     */
+    use HasFactory, HasMedia, HasRoles, Notifiable, TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'name',
-        'slug',
         'email',
+        'phone',
+        'is_active',
         'password',
-        'role_id',
-        'avatar',
-        'status'
     ];
 
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $hidden = [
         'password',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
         'remember_token',
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array<string, string>
+     * @return array<string, string>
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
-    /**
-     * Upload user photo with thum size width: 160, height: 120.
-     *
-     * @return void
-     */
-    public function registerMediaCollections(): void
+    protected function casts(): array
     {
-        $this
-            ->addMediaCollection('avatar')->singleFile()
-            ->registerMediaConversions(function (Media $media) {
-                $this
-                    ->addMediaConversion('thumb')
-                    ->width(160)
-                    ->height(120);
-            });
-    }
-
-    /**
-     * Route model binding using slug for query.
-     *
-     * @param  mixed $value
-     * @param  mixed $field
-     * @return void
-     */
-    public function resolveRouteBinding($value, $field = null)
-    {
-        return $this->where('slug', $value)->firstOrFail();
-    }
-
-    /**
-     * This is belongsTo relation with Role model.
-     *
-     * @return void
-     */
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
-
-    /**
-     * Give permission that request slug or role permission slug have or not
-     * This is allows return boolen type value.
-     *
-     * @param  mixed $permission
-     * @return bool
-     */
-    public function hasPermission($permission): bool
-    {
-        return $this->role->permissions()->where('slug', $permission)->first() ? true : false;
+        return [
+            'id' => 'integer',
+            'name' => 'string',
+            'email' => 'string',
+            'phone' => 'string',
+            'is_active' => ActiveStatus::class,
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'two_factor_confirmed_at' => 'datetime',
+        ];
     }
 }

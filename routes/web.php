@@ -1,22 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Frontend\PageController;
+use Inertia\Inertia;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+Route::get('/', fn () => Inertia::render('Welcome'))->name('home');
 
-Route::get('/', function() {
-    return view('frontend.home');
+Route::middleware(['auth', 'active', 'verified'])->group(function (): void {
+    Route::get('dashboard', DashboardController::class)
+        ->name('dashboard');
+
+    Route::post('users/export', [UserController::class, 'export'])
+        ->name('users.export');
+    Route::post('users/import', [UserController::class, 'import'])
+        ->name('users.import');
+    Route::delete('users/bulk-destroy', [UserController::class, 'bulkDestroy'])
+        ->name('users.bulk-destroy');
+    Route::resource('users', UserController::class);
 });
 
-// Dinamic page route | This route allows define in the end
-Route::get('{slug}', [PageController::class, 'index'])->name('page');
+require __DIR__.'/settings.php';
+require __DIR__.'/auth.php';

@@ -1,0 +1,44 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Http\Controllers\Settings\GeneralSettingController;
+use App\Http\Controllers\Settings\PasswordController;
+use App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\Settings\RoleController;
+use App\Http\Controllers\Settings\TwoFactorAuthenticationController;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+
+Route::middleware('auth')->group(function (): void {
+    Route::redirect('settings', '/settings/profile');
+
+    Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('settings/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('settings/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('settings/password', [PasswordController::class, 'edit'])->name('password.edit');
+
+    Route::put('settings/password', [PasswordController::class, 'update'])
+        ->middleware('throttle:6,1')
+        ->name('password.update');
+
+    Route::get('settings/appearance', fn () => Inertia::render('settings/Appearance'))
+        ->name('appearance.edit');
+
+    Route::get('settings/two-factor', [TwoFactorAuthenticationController::class, 'show'])
+        ->name('two-factor.show');
+
+    Route::post('settings/roles/export', [RoleController::class, 'export'])
+        ->name('roles.export');
+    Route::post('settings/roles/import', [RoleController::class, 'import'])
+        ->name('roles.import');
+    Route::delete('settings/roles/bulk-destroy', [RoleController::class, 'bulkDestroy'])
+        ->name('roles.bulk-destroy');
+    Route::resource('settings/roles', RoleController::class)
+        ->except('show');
+
+    Route::get('settings/general', [GeneralSettingController::class, 'create'])
+        ->name('general-settings.create');
+    Route::post('settings/general', [GeneralSettingController::class, 'update']);
+});

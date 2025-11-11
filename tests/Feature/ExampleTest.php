@@ -1,21 +1,9 @@
 <?php
 
-namespace Tests\Feature;
+declare(strict_types=1);
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+test('returns a successful response', function (): void {
+    $response = $this->get(route('home'));
 
-class ExampleTest extends TestCase
-{
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function test_example()
-    {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
-    }
-}
+    $response->assertStatus(200);
+});

@@ -1,29 +1,56 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Permission\Models\Permission as SpatiePermission;
 
-class Permission extends Model
+/**
+ * App\Models\Permission
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $title
+ * @property int $module_id
+ * @property string $guard_name
+ * @property CarbonInterface $created_at
+ * @property CarbonInterface $updated_at
+ * @property-read Module $module
+ */
+final class Permission extends SpatiePermission
 {
+    /** @use HasFactory<\Database\Factories\PermissionFactory> */
     use HasFactory;
 
-    protected $table = "permissions";
-
-    protected $guarded = ['id'];
-
-    protected $hidden = [
-        'created_at', 'updated_at'
-    ];
-
-    public function module()
+    /**
+     * this model belongs to module
+     *
+     * @return BelongsTo<Module, $this>
+     */
+    public function module(): BelongsTo
     {
         return $this->belongsTo(Module::class);
     }
 
-    public function roles()
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
     {
-        return $this->belongsToMany(Role::class);
+        return [
+            'id' => 'integer',
+            'name' => 'string',
+            'title' => 'string',
+            'module_id' => 'integer',
+            'guard_name' => 'string',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
     }
 }

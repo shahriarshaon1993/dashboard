@@ -1,24 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\GeneralSetting;
 use Illuminate\Database\Seeder;
-use Database\Seeders\UserSeeder;
-use Database\Seeders\PermissionSeeder;
 
-class DatabaseSeeder extends Seeder
+final class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
-        // \App\Models\User::factory(50)->create();
-        $this->call(PermissionSeeder::class);
-        $this->call(RoleSeeder::class);
-        $this->call(UserSeeder::class);
-        $this->call(PageSeeder::class);
+        GeneralSetting::factory()->create();
+
+        $this->call([
+            RoleSeeder::class,
+            AdminSeeder::class,
+            ModuleAndPermissionsSeeder::class,
+        ]);
     }
 }
