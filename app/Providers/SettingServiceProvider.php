@@ -14,7 +14,7 @@ final class SettingServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (! app()->environment('testing')) {
+        if (! app()->environment('testing') && !app()->runningInConsole()) {
             $settings = GeneralSetting::getSettings();
 
             if ($settings->timezone) {
