@@ -8,7 +8,6 @@ import { createApp, h } from 'vue';
 import { initializeTheme } from './composables/useAppearance';
 import { usePage } from '@inertiajs/vue3';
 import { SharedData } from '@/types';
-import { title } from 'process';
 
 const page = usePage<SharedData>();
 
