@@ -11,10 +11,10 @@ beforeEach(function (): void {
     actingAsAdmin();
 });
 
-it('can displayed the general setting create page', function (): void {
+it('can displayed the general setting edit page', function (): void {
     $setting = GeneralSetting::factory()->create();
 
-    $response = $this->get(route('general-settings.create'));
+    $response = $this->get(route('general-settings.edit'));
 
     $response->assertStatus(200);
 
@@ -25,10 +25,10 @@ it('can displayed the general setting create page', function (): void {
     );
 });
 
-it('creates general setting if none exists', function (): void {
-    expect(GeneralSetting::count())->toBe(0);
+it('edit general setting if none exists', function (): void {
+    expect(GeneralSetting::query()->count())->toBe(0);
 
-    $response = $this->post(route('general-settings.create'), [
+    $response = $this->patch(route('general-settings.edit'), [
         'site_title' => 'Dashboard',
         'date_format' => 'd M Y',
         'developed_by' => 'Me, Shaon',
@@ -45,7 +45,7 @@ it('creates general setting if none exists', function (): void {
 it('updates general setting if already exists', function (): void {
     $setting = GeneralSetting::factory()->create();
 
-    $response = $this->post(route('general-settings.create'), [
+    $response = $this->patch(route('general-settings.edit'), [
         'site_title' => 'MyApp',
         'date_format' => $setting->date_format,
         'developed_by' => $setting->developed_by,
@@ -59,9 +59,9 @@ it('updates general setting if already exists', function (): void {
 });
 
 it('site logo remove when logo remove is false', function (): void {
-    $setting = GeneralSetting::factory()->create();
+    GeneralSetting::factory()->create();
 
-    $response = $this->post(route('general-settings.create'), [
+    $response = $this->patch(route('general-settings.edit'), [
         'site_title' => 'Dashboard',
         'date_format' => 'd M Y',
         'developed_by' => 'Me, Shaon',

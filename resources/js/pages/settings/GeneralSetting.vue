@@ -4,7 +4,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { GeneralSetting } from '@/types/generalSetting';
 import { type BreadcrumbItem } from '@/types';
-import { create } from '@/routes/general-settings';
+import { edit } from '@/routes/general-settings';
 import GeneralSettingForm from '@/components/app/settings/GeneralSettingForm.vue';
 
 defineProps < {
@@ -12,7 +12,7 @@ defineProps < {
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Create or Update', href: create().url },
+    { title: 'Create or Update', href: edit().url },
 ];
 </script>
 

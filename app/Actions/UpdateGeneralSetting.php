@@ -10,12 +10,12 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
-final class CreateGeneralSetting
+final class UpdateGeneralSetting
 {
     public function handle(GeneralSettingDto $settingDto): GeneralSetting
     {
         return DB::transaction(function () use ($settingDto): GeneralSetting {
-            $setting = GeneralSetting::first();
+            $setting = GeneralSetting::query()->first();
 
             $data = [
                 'site_title' => $settingDto->site_title,

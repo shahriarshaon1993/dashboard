@@ -7,7 +7,7 @@ import Input from '@/components/ui/input/Input.vue';
 import Label from '@/components/ui/label/Label.vue';
 import { toast } from 'vue-sonner';
 import { useForm, usePage } from '@inertiajs/vue3';
-import { create } from '@/routes/general-settings';
+import { edit } from '@/routes/general-settings';
 import { SharedData } from '@/types';
 
 const props = defineProps<{
@@ -25,9 +25,12 @@ const form = useForm<GeneralSettingForm>({
 });
 
 const submit = () => {
-    form.post(create().url, {
+    form.post(edit().url, {
         preserveScroll: true,
         forceFormData: true,
+        headers: {
+            'X-HTTP-Method-Override': 'PATCH',
+        },
         onSuccess: () => {
             toast('Success!', { description: page.props.flash.success });
         },

@@ -15,7 +15,7 @@ import { dashboard } from '@/routes';
 import { index as viewRoles } from '@/routes/roles';
 import { index as viewUsers } from '@/routes/users';
 import { index as viewActivity } from '@/routes/activities';
-import { create as viewGeneralSetting } from '@/routes/general-settings';
+import { edit as editGeneralSetting } from '@/routes/general-settings';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
 import { LayoutGrid, Settings, Users, ClipboardPenLine } from 'lucide-vue-next';
@@ -42,7 +42,7 @@ const mainNavItems: NavItem[] = [
         items: [
             {
                 title: 'General Setting',
-                href: viewGeneralSetting(),
+                href: editGeneralSetting(),
                 permission: 'access settings'
             },
             {

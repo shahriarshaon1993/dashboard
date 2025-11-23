@@ -38,7 +38,7 @@ Route::middleware('auth')->group(function (): void {
     Route::resource('settings/roles', RoleController::class)
         ->except('show');
 
-    Route::get('settings/general', [GeneralSettingController::class, 'create'])
-        ->name('general-settings.create');
-    Route::post('settings/general', [GeneralSettingController::class, 'update']);
+    Route::get('settings/general', [GeneralSettingController::class, 'edit'])
+        ->name('general-settings.edit');
+    Route::patch('settings/general', [GeneralSettingController::class, 'update']);
 });

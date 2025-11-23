@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Settings;
 
-use App\Actions\CreateGeneralSetting;
+use App\Actions\UpdateGeneralSetting;
 use App\DTOs\GeneralSettingDto;
 use App\Http\Requests\Settings\StoreGeneralSettingRequest;
 use App\Http\Resources\GeneralSettingResource;
@@ -17,28 +17,24 @@ use Inertia\Response;
 
 final class GeneralSettingController
 {
-    public function create(): Response
+    public function edit(): Response
     {
         Gate::authorize('access', User::class);
 
-        $setting = GeneralSetting::query()
-            ->with('media')
-            ->first();
-
         return Inertia::render('settings/GeneralSetting', [
-            'setting' => new GeneralSettingResource($setting),
+            'setting' => GeneralSettingResource::make(
+                GeneralSetting::query()->with('media')->first(),
+            ),
         ]);
     }
 
-    public function update(StoreGeneralSettingRequest $request, CreateGeneralSetting $action): RedirectResponse
+    public function update(StoreGeneralSettingRequest $request, UpdateGeneralSetting $action): RedirectResponse
     {
         Gate::authorize('access', User::class);
 
-        $settingDto = GeneralSettingDto::form($request);
+        $action->handle(GeneralSettingDto::form($request));
 
-        $action->handle($settingDto);
-
-        return to_route('general-settings.create')
+        return to_route('general-settings.edit')
             ->with('success', 'General setting update successfully!');
     }
 }
