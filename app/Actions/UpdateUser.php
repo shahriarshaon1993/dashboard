@@ -26,7 +26,7 @@ final class UpdateUser
                 'is_active' => $userDto->is_active,
             ];
 
-            if ($userDto->password !== null && $userDto->password !== '' && $userDto->password !== '0') {
+            if (! in_array($userDto->password, [null, '', '0'], true)) {
                 $data['password'] = Hash::make($userDto->password);
             }
 

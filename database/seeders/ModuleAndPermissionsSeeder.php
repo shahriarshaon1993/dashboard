@@ -33,6 +33,10 @@ final class ModuleAndPermissionsSeeder extends Seeder
                 'description' => 'Manage General Setting and their permissions.',
                 'permissions' => ['access settings'],
             ],
+            'Activity Log' => [
+                'description' => 'Manage Activity Log.',
+                'permissions' => ['view activity', 'delete activity', 'export activity'],
+            ],
         ];
 
         foreach ($modules as $moduleName => $moduleData) {

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { TableHead } from '@/components/ui/table';
 import { ArrowDownUp, ArrowUpDown } from 'lucide-vue-next';
-import { defineEmits } from 'vue';
 
 type SortOrder = 'asc' | 'desc';
 

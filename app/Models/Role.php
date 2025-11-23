@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\HasActivityLog;
 use Carbon\CarbonInterface;
 use Database\Factories\RoleFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Models\Role as SpiteRole;
 
 /**
@@ -23,7 +25,7 @@ final class Role extends SpiteRole
     /**
      * @use HasFactory<RoleFactory>
      */
-    use HasFactory;
+    use HasActivityLog, HasFactory, LogsActivity;
 
     /**
      * Get the attributes that should be cast.

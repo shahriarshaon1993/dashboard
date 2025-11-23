@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\HasActivityLog;
 use Carbon\CarbonInterface;
 use Database\Factories\MediaFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * App\Models\Media
@@ -28,7 +30,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 final class Media extends Model
 {
     /** @use HasFactory<MediaFactory> */
-    use HasFactory;
+    use HasActivityLog, HasFactory, LogsActivity;
 
     /**
      * Get the attributes that should be cast.

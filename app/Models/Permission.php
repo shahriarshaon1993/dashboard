@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\HasActivityLog;
 use Carbon\CarbonInterface;
+use Database\Factories\PermissionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Models\Permission as SpatiePermission;
 
 /**
@@ -23,8 +26,8 @@ use Spatie\Permission\Models\Permission as SpatiePermission;
  */
 final class Permission extends SpatiePermission
 {
-    /** @use HasFactory<\Database\Factories\PermissionFactory> */
-    use HasFactory;
+    /** @use HasFactory<PermissionFactory> */
+    use HasActivityLog, HasFactory, LogsActivity;
 
     /**
      * this model belongs to module

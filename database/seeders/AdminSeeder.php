@@ -17,7 +17,7 @@ final class AdminSeeder extends Seeder
     {
         $admin = User::query()->create([
             'name' => 'John Doe',
-            'email' => 'admin@spikepos.com',
+            'email' => 'admin@example.com',
             'phone' => fake()->phoneNumber(),
             'password' => Hash::make('password'),
         ]);
@@ -26,7 +26,7 @@ final class AdminSeeder extends Seeder
 
         $employee = User::query()->create([
             'name' => 'Employee',
-            'email' => 'employee@spikepos.com',
+            'email' => 'employee@example.com',
             'phone' => fake()->phoneNumber(),
             'password' => Hash::make('password'),
         ]);
@@ -35,7 +35,7 @@ final class AdminSeeder extends Seeder
 
         $customer = User::query()->create([
             'name' => 'Customer',
-            'email' => 'customer@spikepos.com',
+            'email' => 'customer@example.com',
             'phone' => fake()->phoneNumber(),
             'password' => Hash::make('password'),
         ]);

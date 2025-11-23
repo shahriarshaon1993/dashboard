@@ -178,9 +178,7 @@ const selectAll = computed({
                 @input="debouncedSearch"
                 class="pl-8"
             />
-            <span
-                class="absolute inset-y-0 start-0 flex items-center justify-center px-2"
-            >
+            <span class="absolute inset-y-0 start-0 flex items-center justify-center px-2">
                 <Search class="size-4 text-muted-foreground" />
             </span>
         </div>
@@ -219,16 +217,8 @@ const selectAll = computed({
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead
-                            v-if="hasPermission('delete users')"
-                            class="w-6"
-                        >
-                            <Checkbox
-                                :model-value="selectAll"
-                                @update:model-value="
-                                    toggleSelectAll((selectAll = !selectAll))
-                                "
-                            />
+                        <TableHead v-if="hasPermission('delete users')" class="w-6">
+                            <Checkbox :model-value="selectAll" @update:model-value="toggleSelectAll((selectAll = !selectAll))"/>
                         </TableHead>
                         <SortTableHeader
                             label="#"
@@ -280,12 +270,7 @@ const selectAll = computed({
                             :sort-order="filters.sort_order"
                             @sort="sort"
                         />
-                        <TableHead
-                            v-if="
-                                hasPermissions(['update users', 'delete users'])
-                            "
-                            class="text-right"
-                        >
+                        <TableHead v-if="hasPermissions(['update users', 'delete users'])" class="text-right">
                             Actions
                         </TableHead>
                     </TableRow>

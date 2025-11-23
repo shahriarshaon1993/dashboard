@@ -32,13 +32,11 @@ it('can displayed the users with paginate currently', function (): void {
         fn (Assert $page): AssertableJson => $page
             ->component('users/Index')
             ->has('users', 3)
-            ->has(
-                'users.meta',
-                fn ($meta) => $meta
-                    ->where('per_page', 15)
-                    ->where('current_page', 1)
-                    ->where('last_page', 1)
-                    ->etc()
+            ->has('users.meta', fn ($meta) => $meta
+                ->where('per_page', 15)
+                ->where('current_page', 1)
+                ->where('last_page', 1)
+                ->etc()
             )
     );
 });
@@ -275,8 +273,7 @@ it('deletes sessions if user is not active', function (): void {
 it('can delete user', function (): void {
     $user = User::factory()->create();
 
-    $response = $this
-        ->delete(route('users.destroy', $user->id));
+    $response = $this->delete(route('users.destroy', $user->id));
 
     $response->assertStatus(302);
     $this->assertDatabaseMissing('users', [
@@ -287,15 +284,13 @@ it('can delete user', function (): void {
 it('can bulk delete multiple users', function (): void {
     $users = User::factory()->count(5)->create();
 
-    $payload = [
-        'ids' => $users->pluck('id')->toArray(),
-    ];
+    $payload = ['ids' => $users->pluck('id')->toArray()];
 
     $response = $this->delete(route('users.bulk-destroy'), $payload);
 
     $response->assertRedirect();
     foreach ($users as $user) {
-        expect(User::find($user->id))->toBeNull();
+        expect(User::query()->find($user->id))->toBeNull();
     }
 });
 

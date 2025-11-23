@@ -27,7 +27,7 @@ trait HasMedia
     }
 
     /**
-     * Store media to database.
+     * Store media to a database.
      */
     public function addMedia(UploadedFile $file, string $collection = 'default'): Media
     {
@@ -88,7 +88,7 @@ trait HasMedia
     }
 
     /**
-     * Get single file with full url.
+     * Get a single file with full url.
      */
     public function getFirstMediaUrl(string $collection = 'default'): ?string
     {

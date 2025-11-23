@@ -14,10 +14,11 @@ import {
 import { dashboard } from '@/routes';
 import { index as viewRoles } from '@/routes/roles';
 import { index as viewUsers } from '@/routes/users';
+import { index as viewActivity } from '@/routes/activities';
 import { create as viewGeneralSetting } from '@/routes/general-settings';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { LayoutGrid, Settings, Users } from 'lucide-vue-next';
+import { LayoutGrid, Settings, Users, ClipboardPenLine } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const mainNavItems: NavItem[] = [
@@ -50,6 +51,12 @@ const mainNavItems: NavItem[] = [
                 permission: 'view roles',
             },
         ],
+    },
+    {
+        title: 'System Activity Logs',
+        href: viewActivity(),
+        permissions: ['view activity', 'delete activity', 'export activity'],
+        icon: ClipboardPenLine,
     },
 ];
 </script>

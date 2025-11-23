@@ -14,7 +14,7 @@ final class DateFormat
         $dateFormat = config('app.date_format');
 
         $date = clone $date;
-        if ($timezone !== null && $timezone !== '' && $timezone !== '0') {
+        if (! in_array($timezone, [null, '', '0'], true)) {
             $date->setTimezone($timezone);
         }
 

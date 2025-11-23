@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\HasActivityLog;
 use App\Traits\HasMedia;
 use Carbon\CarbonInterface;
 use Database\Factories\GeneralSettingFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * App\Models\GeneralSetting
@@ -28,7 +30,7 @@ final class GeneralSetting extends Model
      * @use HasMedia<GeneralSetting>
      * @use HasFactory<GeneralSettingFactory>
      */
-    use HasFactory, HasMedia;
+    use HasActivityLog, HasFactory, HasMedia, LogsActivity;
 
     /**
      * Get the attributes that should be cast.
@@ -45,7 +47,7 @@ final class GeneralSetting extends Model
         'updated_at' => 'datetime',
     ];
 
-    public static function getSettings(): static
+    public static function getSettings(): self
     {
         /** @var static $settings */
         $settings = Cache::rememberForever(
