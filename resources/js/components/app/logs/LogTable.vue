@@ -192,8 +192,8 @@ const formattedOldValue = computed(() => {
         if (key in data) delete data[key];
     });
 
-    return Object.entries(data)
-        .map(([key, value]) => `${value}`)
+    return Object.values(data)
+        .map(value => `${value}`)
         .join("\n");
 });
 
@@ -205,8 +205,8 @@ const formattedChangesValue = computed(() => {
         if (key in data) delete data[key];
     });
 
-    return Object.entries(data)
-        .map(([key, value]) => `${value}`)
+    return Object.values(data)
+        .map(value => `${value}`)
         .join("\n");
 });
 
@@ -404,10 +404,7 @@ const clearActivityLogHistory = (): void => {
             </div>
             <DropdownMenuSeparator />
             <div class="space-y-2">
-                <p>
-                    {{ activity?.description }} -
-                    <b class="capitalize">[{{ activity?.causer.roles.toString() }}]</b>
-                </p>
+                <p>{{ activity?.description }}</p>
 
                 <div class="mt-2 flex w-full items-center gap-2">
                     <div v-if="activity?.changes" class="flex-1 space-y-2">
