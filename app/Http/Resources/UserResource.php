@@ -32,15 +32,11 @@ final class UserResource extends JsonResource
                 'label' => $this->is_active->label(),
                 'color' => $this->is_active->color(),
             ],
-            'avatar' => $this->getFirstMediaUrl('avatar'),
+            'avatar' => $this->whenLoaded('media', fn (): ?string => $this->getFirstMediaUrl('avatar')),
             'created_at' => DateFormat::format($this->created_at),
             'updated_at' => DateFormat::format($this->updated_at),
-            'roles' => RoleResource::collection(
-                $this->whenLoaded('roles')
-            ),
-            'permissions' => PermissionResource::collection(
-                $this->whenLoaded('permissions')
-            ),
+            'roles' => RoleResource::collection($this->whenLoaded('roles')),
+            'permissions' => PermissionResource::collection($this->whenLoaded('permissions')),
         ];
     }
 }

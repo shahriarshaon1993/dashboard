@@ -24,9 +24,9 @@ final class UserSharedResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'avatar' => $this->getFirstMediaUrl('avatar'),
-            'roles' => $this->getRoleNames(),
-            'permissions' => $this->getAllPermissions()->pluck('name'),
+            'avatar' => $this->whenLoaded('media', fn (): ?string => $this->getFirstMediaUrl('avatar')),
+            'roles' => $this->whenLoaded('roles', $this->getRoleNames(...)),
+            'permissions' => $this->whenLoaded('permissions', $this->getPermissionNames(...)),
         ];
     }
 }

@@ -56,7 +56,7 @@ final class HandleInertiaRequests extends Middleware
                 'author' => mb_trim($author ?? ''),
             ],
             'auth.user' => fn (): ?UserSharedResource => $request->user()
-                ? new UserSharedResource($request->user()->loadMissing('media'))
+                ? new UserSharedResource($request->user()->loadMissing(['media', 'roles', 'permissions']))
                 : null,
             'flash' => [
                 'message' => fn () => $request->session()->get('message'),

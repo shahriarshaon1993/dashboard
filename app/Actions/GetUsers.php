@@ -20,7 +20,7 @@ final class GetUsers
     public function handle(FilterDto $filters): array
     {
         $users = User::query()
-            ->with('media')
+            ->with(['media'])
             ->when(isset($filters->search), function (Builder $q) use ($filters): void {
                 $q->where('name', 'LIKE', '%'.$filters->search.'%')
                     ->orWhere('email', 'LIKE', '%'.$filters->search.'%')
