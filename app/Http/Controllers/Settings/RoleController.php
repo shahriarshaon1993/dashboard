@@ -17,10 +17,8 @@ use App\Http\Requests\DeleteRequest;
 use App\Http\Requests\FilterRequest;
 use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
-use App\Http\Resources\ModuleResource;
 use App\Http\Resources\RoleResource;
 use App\Imports\RoleImport;
-use App\Models\Module;
 use App\Models\Role;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -56,11 +54,7 @@ final class RoleController
     {
         Gate::authorize('create', Role::class);
 
-        $modules = Module::query()->with('permissions')->get();
-
-        return Inertia::render('settings/roles/Create', [
-            'modules' => ModuleResource::collection($modules),
-        ]);
+        return Inertia::render('settings/roles/Create');
     }
 
     /**
@@ -70,9 +64,7 @@ final class RoleController
     {
         Gate::authorize('create', Role::class);
 
-        $roleDto = RoleDto::from($request);
-
-        $action->handle($roleDto);
+        $action->handle(RoleDto::from($request));
 
         return to_route('roles.index')
             ->with('success', 'Role created successfully.');
@@ -85,13 +77,10 @@ final class RoleController
     {
         Gate::authorize('update', Role::class);
 
-        $role->load(['permissions']);
-
-        $modules = Module::query()->with('permissions')->get();
+        $role->loadMissing(['permissions']);
 
         return Inertia::render('settings/roles/Edit', [
             'role' => new RoleResource($role),
-            'modules' => ModuleResource::collection($modules),
         ]);
     }
 
@@ -102,11 +91,9 @@ final class RoleController
     {
         Gate::authorize('update', Role::class);
 
-        $roleDto = RoleDto::from($request);
+        $action->handle(RoleDto::from($request), $role);
 
-        $action->handle($roleDto, $role);
-
-        return back()->with('success', 'Role updated successfully.');
+        return to_route('roles.index')->with('success', 'Role updated successfully.');
     }
 
     /**
@@ -118,7 +105,7 @@ final class RoleController
 
         $action->handle($role);
 
-        return back()->with('success', 'Role deleted successfully.');
+        return to_route('roles.index')->with('success', 'Role deleted successfully.');
     }
 
     /**
@@ -135,7 +122,7 @@ final class RoleController
 
         $action->handle($roleIds->ids);
 
-        return back()->with('success', 'Selected roles deleted successfully.');
+        return to_route('roles.index')->with('success', 'Selected roles deleted successfully.');
     }
 
     /**
@@ -151,7 +138,7 @@ final class RoleController
 
         Excel::import(new RoleImport(), $request->file('file'));
 
-        return back()->with('success', 'Role imported successfully!');
+        return to_route('roles.index')->with('success', 'Role imported successfully!');
     }
 
     /**

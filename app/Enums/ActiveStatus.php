@@ -10,6 +10,20 @@ enum ActiveStatus: string
     case Inactive = 'inactive';
 
     /**
+     * @return array<int, array{value: string, label: string}>
+     */
+    public static function asArray(): array
+    {
+        return array_map(
+            fn (ActiveStatus $case): array => [
+                'value' => $case->value,
+                'label' => $case->label(),
+            ],
+            self::cases()
+        );
+    }
+
+    /**
      * Get the label for the enum value.
      */
     public function label(): string

@@ -5,7 +5,6 @@ declare(strict_types=1);
 use App\Enums\ActiveStatus;
 use App\Exports\UserExport;
 use App\Imports\UserImport;
-use App\Models\Module;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
@@ -58,18 +57,12 @@ it('can displayed the users with search filter currently', function (): void {
 });
 
 it('can displayed the user create page', function (): void {
-    $modules = Module::factory()->count(3)->create();
-    $roles = Role::factory()->count(3)->create();
-
     $response = $this->get(route('users.create'));
 
     $response->assertStatus(200);
-
     $response->assertInertia(
         fn (Assert $page): AssertableJson => $page
             ->component('users/Create')
-            ->has('modules', 3)
-            ->has('roles', 4)
     );
 });
 
@@ -115,8 +108,6 @@ it('create a new user with roles and permissions', function (): void {
 
 it('edit page renders with user, roles and modules', function (): void {
     $user = User::factory()->create();
-    Role::factory()->count(2)->create();
-    Module::factory()->count(2)->create();
 
     $response = $this->get(route('users.edit', $user->id));
 
@@ -126,8 +117,6 @@ it('edit page renders with user, roles and modules', function (): void {
         fn (Assert $page): AssertableJson => $page
             ->component('users/Edit')
             ->has('user')
-            ->has('roles', 3)
-            ->has('modules', 2)
     );
 });
 

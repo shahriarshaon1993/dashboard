@@ -1,28 +1,24 @@
 <script setup lang="ts">
 import InputError from '@/components/InputError.vue';
 import InputMultipleSelect from '@/components/InputMultipleSelect.vue';
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from '@/components/ui/accordion';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import Button from '@/components/ui/button/Button.vue';
 import Input from '@/components/ui/input/Input.vue';
 import Label from '@/components/ui/label/Label.vue';
 import { store, update } from '@/routes/roles';
-import { ModuleWithPermissions, SharedData } from '@/types';
+import { SharedData } from '@/types';
 import { Role, RoleForm } from '@/types/roles';
 import { useForm, usePage } from '@inertiajs/vue3';
 import { startCase } from 'lodash';
 import { toast } from 'vue-sonner';
+import { useOptions } from '@/composables/useOptions';
 
 const props = defineProps<{
     role?: Role;
-    modules: ModuleWithPermissions[];
 }>();
 
 const page = usePage<SharedData>();
+const { modules } = useOptions();
 
 const form = useForm<RoleForm>({
     name: props.role?.name ?? '',

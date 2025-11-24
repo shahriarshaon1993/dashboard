@@ -4,12 +4,8 @@ import RoleForm from '@/components/app/role/RoleForm.vue';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { create, index } from '@/routes/roles';
-import { type BreadcrumbItem, ModuleWithPermissions } from '@/types';
+import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-
-defineProps<{
-    modules: ModuleWithPermissions[];
-}>();
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Roles', href: index().url },
@@ -39,7 +35,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                 </HeadingSmall>
 
                 <!-- Form -->
-                <RoleForm :modules="modules" />
+                <RoleForm />
             </div>
         </div>
     </AppLayout>

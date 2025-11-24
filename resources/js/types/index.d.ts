@@ -85,6 +85,16 @@ export interface Filters {
     sort_order: 'asc' | 'desc';
 }
 
+export interface OptionItem {
+    id: number
+    name: string
+}
+
+export interface SelectOption {
+    value: string
+    label: string
+}
+
 export interface SharedData extends PageProps {
     name: string;
     quote: { message: string; author: string };
@@ -97,6 +107,11 @@ export interface SharedData extends PageProps {
         date_format: string;
         site_logo: string;
     };
+    options: {
+        roles: OptionItem[];
+        modules: ModuleWithPermissions[];
+        activeStatus: SelectOption[];
+    }
 }
 
 export interface Permission {
@@ -114,12 +129,6 @@ export interface ModuleWithPermissions {
     name: string;
     description: string;
     permissions: Permission[];
-}
-
-export interface ActiveStatus {
-    value: string;
-    label: string;
-    color?: string;
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;

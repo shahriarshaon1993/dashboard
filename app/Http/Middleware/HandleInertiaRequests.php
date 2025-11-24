@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Enums\ActiveStatus;
 use App\Http\Resources\UserSharedResource;
 use App\Models\GeneralSetting;
+use App\Models\Module;
+use App\Models\Role;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -66,7 +69,28 @@ final class HandleInertiaRequests extends Middleware
                 'date_format' => $settings->date_format ?? config('app.date_format'),
                 'site_logo' => $settings->getFirstMediaUrl('site_logo'),
             ],
+            'options' => $this->getSharedOptions($request),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    private function getSharedOptions(Request $request): ?array
+    {
+        if (! $request->user()) {
+            return null;
+        }
+
+        return cache()->remember('dropdown_options', now()->addHours(24), fn (): array => [
+            'roles' => Role::query()->orderBy('name')->get(['id', 'name']),
+
+            'modules' => Module::with('permissions:id,module_id,name')
+                ->orderBy('name')
+                ->get(['id', 'name', 'description']),
+
+            'activeStatus' => ActiveStatus::asArray(),
+        ]);
     }
 }

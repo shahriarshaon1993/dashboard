@@ -12,18 +12,13 @@ use App\Actions\UpdateUser;
 use App\DTOs\BulkDestroyDto;
 use App\DTOs\FilterDto;
 use App\DTOs\UserDto;
-use App\Enums\ActiveStatus;
 use App\Exports\UserExport;
 use App\Http\Requests\DeleteRequest;
 use App\Http\Requests\FilterRequest;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
-use App\Http\Resources\ModuleResource;
-use App\Http\Resources\RoleResource;
 use App\Http\Resources\UserResource;
 use App\Imports\UserImport;
-use App\Models\Module;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -59,24 +54,7 @@ final class UserController
     {
         Gate::authorize('create', User::class);
 
-        $modules = Module::query()
-            ->with('permissions')
-            ->orderBy('name', 'ASC')
-            ->get();
-
-        $roles = Role::query()
-            ->orderBy('name', 'ASC')
-            ->get();
-
-        return Inertia::render('users/Create', [
-            'roles' => RoleResource::collection($roles),
-            'modules' => ModuleResource::collection($modules),
-            'activeStatus' => collect(ActiveStatus::cases())
-                ->map(fn (ActiveStatus $status): array => [
-                    'value' => $status->value,
-                    'label' => $status->label(),
-                ]),
-        ]);
+        return Inertia::render('users/Create');
     }
 
     /**
@@ -86,9 +64,7 @@ final class UserController
     {
         Gate::authorize('create', User::class);
 
-        $userDto = UserDto::from($request);
-
-        $action->handle($userDto);
+        $action->handle(UserDto::from($request));
 
         return to_route('users.index')
             ->with('success', 'User created successfully.');
@@ -101,26 +77,10 @@ final class UserController
     {
         Gate::authorize('update', $user);
 
-        $modules = Module::query()
-            ->with('permissions')
-            ->orderBy('name', 'ASC')
-            ->get();
-
-        $roles = Role::query()
-            ->orderBy('name', 'ASC')
-            ->get();
-
-        $user->load(['roles', 'permissions', 'media']);
+        $user->loadMissing(['roles', 'permissions', 'media']);
 
         return Inertia::render('users/Edit', [
-            'user' => new UserResource($user),
-            'roles' => RoleResource::collection($roles),
-            'modules' => ModuleResource::collection($modules),
-            'activeStatus' => collect(ActiveStatus::cases())
-                ->map(fn (ActiveStatus $status): array => [
-                    'value' => $status->value,
-                    'label' => $status->label(),
-                ]),
+            'user' => UserResource::make($user),
         ]);
     }
 
@@ -131,11 +91,10 @@ final class UserController
     {
         Gate::authorize('update', $user);
 
-        $userDto = UserDto::from($request);
+        $action->handle(UserDto::from($request), $user);
 
-        $action->handle($userDto, $user);
-
-        return back()->with('success', 'User updated successfully.');
+        return to_route('users.index')
+            ->with('success', 'User updated successfully.');
     }
 
     /**
@@ -147,7 +106,8 @@ final class UserController
 
         $action->handle($user);
 
-        return back()->with('success', 'User deleted successfully.');
+        return to_route('users.index')
+            ->with('success', 'User deleted successfully.');
     }
 
     /**
@@ -160,11 +120,10 @@ final class UserController
         /** @var array{ids: int[]} $data */
         $data = $request->validated();
 
-        $userIds = BulkDestroyDto::from($data);
+        $action->handle(BulkDestroyDto::from($data)->ids);
 
-        $action->handle($userIds->ids);
-
-        return back()->with('success', 'Selected users deleted successfully.');
+        return to_route('users.index')
+            ->with('success', 'Selected users deleted successfully.');
     }
 
     /**

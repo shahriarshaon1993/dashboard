@@ -16,7 +16,7 @@ final readonly class FilterDto
     }
 
     /**
-     * Create FilterDto from array.
+     * Create FilterDto from an array.
      *
      * @param  array{search: string|null, sort_field: string, sort_order: string, per_page: int}  $data
      */

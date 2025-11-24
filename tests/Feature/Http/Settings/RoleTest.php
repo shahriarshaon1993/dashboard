@@ -2,10 +2,8 @@
 
 declare(strict_types=1);
 
-use App\DTOs\RoleDto;
 use App\Exports\RoleExport;
 use App\Imports\RoleImport;
-use App\Models\Module;
 use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\UploadedFile;
@@ -23,7 +21,6 @@ it('can displayed the roles with paginate currently', function (): void {
     $response = $this->get(route('roles.index'));
 
     $response->assertStatus(200);
-
     $response->assertInertia(
         fn (Assert $page): AssertableJson => $page
             ->component('settings/roles/Index')
@@ -47,7 +44,6 @@ it('can displayed the roles with search filter currently', function (): void {
     $response = $this->get(route('roles.index', ['search' => 'emp']));
 
     $response->assertStatus(200);
-
     $response->assertInertia(
         fn (Assert $page): AssertableJson => $page
             ->component('settings/roles/Index')
@@ -58,8 +54,6 @@ it('can displayed the roles with search filter currently', function (): void {
 });
 
 it('can displayed the role create page', function (): void {
-    $modules = Module::factory()->count(3)->create();
-
     $response = $this->get(route('roles.create'));
 
     $response->assertStatus(200);
@@ -67,50 +61,44 @@ it('can displayed the role create page', function (): void {
     $response->assertInertia(
         fn (Assert $page): AssertableJson => $page
             ->component('settings/roles/Create')
-            ->has('modules', 3)
     );
 });
 
 it('can create a new role with valid data', function (): void {
-    $permission = Permission::factory()->create();
+    $permissions = Permission::factory()->count(2)->create();
 
-    $roleDto = new RoleDto('Test Role', [$permission->id]);
-
-    $response = $this->post(route('roles.store'), (array) $roleDto);
+    $response = $this->post(route('roles.store'), [
+        'name' => 'Role Test',
+        'permissions' => $permissions->pluck('id')->toArray(),
+    ]);
 
     $response->assertStatus(302);
     $this->assertDatabaseHas('roles', [
-        'name' => 'Test Role',
+        'name' => 'Role Test',
     ]);
 });
 
 it('can edit page renders with modules', function (): void {
     $role = Role::factory()->create();
-    $modules = Module::factory()->count(2)->create();
 
     $response = $this->get(route('roles.edit', $role->id));
 
     $response->assertStatus(200);
-
     $response->assertInertia(
         fn (Assert $page): AssertableJson => $page
             ->component('settings/roles/Edit')
             ->has('role')
-            ->has('modules', 2)
     );
 });
 
 it('can updates an existing role with valid data', function (): void {
     $role = Role::create(['name' => 'Role 1']);
-    $permission = Permission::factory()->create();
+    $permissions = Permission::factory()->count(2)->create();
 
-    $roleDto = new RoleDto('Role A', [$permission->id]);
-
-    $response = $this
-        ->put(route('roles.update', $role->id), [
-            'name' => $roleDto->name,
-            'permissions' => $roleDto->permissions,
-        ]);
+    $response = $this->put(route('roles.update', $role->id), [
+        'name' => 'Role A',
+        'permissions' => $permissions->pluck('id')->toArray(),
+    ]);
 
     $response->assertStatus(302);
     $this->assertDatabaseHas('roles', [
@@ -122,8 +110,7 @@ it('can updates an existing role with valid data', function (): void {
 it('can delete role', function (): void {
     $role = Role::factory()->create();
 
-    $response = $this
-        ->delete(route('roles.destroy', $role->id));
+    $response = $this->delete(route('roles.destroy', $role->id));
 
     $response->assertStatus(302);
     $this->assertDatabaseMissing('roles', [
@@ -142,7 +129,7 @@ it('can bulk delete multiple roles', function (): void {
 
     $response->assertRedirect();
     foreach ($roles as $role) {
-        expect(Role::find($role->id))->toBeNull();
+        expect(Role::query()->find($role->id))->toBeNull();
     }
 });
 
@@ -165,7 +152,7 @@ it('can import roles', function (): void {
 it('can exports all roles when no ids are provide', function (): void {
     Excel::fake();
 
-    $roles = Role::factory()->count(3)->create();
+    Role::factory()->count(3)->create();
 
     $response = $this->post(route('roles.export'));
 
@@ -173,7 +160,7 @@ it('can exports all roles when no ids are provide', function (): void {
 
     Excel::assertDownloaded('roles.xlsx', function (RoleExport $export): true {
         $exported = $export->collection();
-        expect($exported->count())->toBe(Role::count());
+        expect($exported->count())->toBe(Role::query()->count());
 
         return true;
     });

@@ -2,38 +2,25 @@
 import FileUploader from '@/components/app/FileUploader.vue';
 import InputError from '@/components/InputError.vue';
 import MultipleSelection from '@/components/InputMultipleSelect.vue';
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from '@/components/ui/accordion';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import Button from '@/components/ui/button/Button.vue';
 import Input from '@/components/ui/input/Input.vue';
 import Label from '@/components/ui/label/Label.vue';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { store, update } from '@/routes/users';
-import { ActiveStatus, ModuleWithPermissions, SharedData } from '@/types';
-import { Role } from '@/types/roles';
+import { SharedData } from '@/types';
 import { User, UserForm } from '@/types/users';
 import { useForm, usePage } from '@inertiajs/vue3';
 import { startCase } from 'lodash';
 import { toast } from 'vue-sonner';
+import { useOptions } from '@/composables/useOptions';
 
 const props = defineProps<{
     user?: User,
-    roles: Role[];
-    activeStatus: ActiveStatus[];
-    modules: ModuleWithPermissions[];
 }>();
 
 const page = usePage<SharedData>();
+const { roles, modules, activeStatus } = useOptions();
 
 const form = useForm<UserForm>({
     name: props.user?.name ?? '',
@@ -78,12 +65,7 @@ const submit = () => {
                     <div class="sm:col-span-3">
                         <Label for="name">Name</Label>
                         <div class="mt-2">
-                            <Input
-                                id="name"
-                                v-model="form.name"
-                                class="mt-1 block w-full"
-                                placeholder="User name"
-                            />
+                            <Input id="name" v-model="form.name" class="mt-1 block w-full" placeholder="User name" />
                         </div>
                         <InputError :message="form.errors.name" />
                     </div>
@@ -91,13 +73,7 @@ const submit = () => {
                     <div class="sm:col-span-3">
                         <Label for="email">Email</Label>
                         <div class="mt-2">
-                            <Input
-                                id="email"
-                                type="email"
-                                v-model="form.email"
-                                class="mt-1 block w-full"
-                                placeholder="User email"
-                            />
+                            <Input id="email" type="email" v-model="form.email" class="mt-1 block w-full" placeholder="User email" />
                         </div>
                         <InputError :message="form.errors.email" />
                     </div>
@@ -105,12 +81,7 @@ const submit = () => {
                     <div class="sm:col-span-3">
                         <Label for="phone">Phone number</Label>
                         <div class="mt-2">
-                            <Input
-                                id="phone"
-                                v-model="form.phone"
-                                class="mt-1 block w-full"
-                                placeholder="User phone"
-                            />
+                            <Input id="phone" v-model="form.phone" class="mt-1 block w-full" placeholder="User phone"/>
                         </div>
                         <InputError :message="form.errors.phone" />
                     </div>
@@ -118,13 +89,7 @@ const submit = () => {
                     <div class="sm:col-span-3">
                         <Label for="password">Password</Label>
                         <div class="mt-2">
-                            <Input
-                                id="password"
-                                type="password"
-                                v-model="form.password"
-                                class="mt-1 block w-full"
-                                placeholder="Enter password"
-                            />
+                            <Input id="password" type="password" v-model="form.password" class="mt-1 block w-full" placeholder="Enter password" />
                         </div>
                         <InputError :message="form.errors.password" />
                     </div>
@@ -138,11 +103,7 @@ const submit = () => {
                                 </SelectTrigger>
 
                                 <SelectContent>
-                                    <SelectItem
-                                        v-for="status in activeStatus"
-                                        :key="status.value"
-                                        :value="status.value"
-                                    >
+                                    <SelectItem v-for="status in activeStatus" :key="status.value" :value="status.value">
                                         {{ status.label }}
                                     </SelectItem>
                                 </SelectContent>
@@ -171,13 +132,7 @@ const submit = () => {
                         <div class="space-y-2">
                             <Label for="avatar">Assign to roles</Label>
                             <div class="mt-2">
-                                <MultipleSelection
-                                    width="100%"
-                                    label="name"
-                                    :items="roles"
-                                    v-model:selected="form.roles"
-                                    placeholder="Select roles"
-                                />
+                                <MultipleSelection width="100%" label="name" :items="roles" v-model:selected="form.roles" placeholder="Select roles" />
                             </div>
                             <InputError :message="form.errors.roles" />
                         </div>
@@ -185,20 +140,12 @@ const submit = () => {
 
                     <div class="col-span-full">
                         <Label for="avatar">Assign to permission</Label>
-                        <Accordion
-                            type="single"
-                            class="mt-2 w-full rounded-lg border px-4 py-2"
-                            collapsible
-                        >
+                        <Accordion type="single" class="mt-2 w-full rounded-lg border px-4 py-2" collapsible>
                             <AccordionItem value="null" class="border-none">
-                                <AccordionTrigger
-                                    class="cursor-pointer hover:no-underline"
-                                >
+                                <AccordionTrigger class="cursor-pointer hover:no-underline">
                                     <div class="text-left">
                                         <div>System permissions</div>
-                                        <p
-                                            class="text-sm text-muted-foreground"
-                                        >
+                                        <p class="text-sm text-muted-foreground">
                                             Role permissions permit access to
                                             resources under your system.
                                         </p>
@@ -214,9 +161,7 @@ const submit = () => {
                                             <h4 class="font-semibold">
                                                 {{ startCase(module.name) }}
                                             </h4>
-                                            <p
-                                                class="text-sm text-muted-foreground"
-                                            >
+                                            <p class="text-sm text-muted-foreground">
                                                 {{ module.description }}
                                             </p>
                                         </div>
